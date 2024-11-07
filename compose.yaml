@@ -1,0 +1,146 @@
+version: '3.8'
+
+services:
+  # Usługa GitLab
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: 'gitlab.localhost'  # Dostosuj nazwę hosta
+    environment:
+      #GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.localhost'  # Ustaw URL zewnętrzny
+        gitlab_rails['initial_root_password'] = 'admin123'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+        gitlab_rails['db_adapter'] = 'postgresql'
+        gitlab_rails['db_encoding'] = 'unicode'
+        gitlab_rails['db_database'] = 'gitlabhq_production'
+        gitlab_rails['db_pool'] = 10
+        gitlab_rails['db_username'] = 'gitlab'
+        gitlab_rails['db_password'] = 'your_db_password'
+        gitlab_rails['db_host'] = 'postgres'
+        gitlab_rails['redis_host'] = 'redis'
+    ports:
+      - '8081:80'         # HTTP port GitLaba
+      - '443:443'         # HTTPS port GitLaba (opcjonalne)
+      - '2224:22'         # Port SSH GitLaba
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    networks:
+      - dev-ci
+    secrets:
+      - gitlab_root_password
+    depends_on:
+      - postgres
+
+  # Usługa bazy danych PostgreSQL
+  postgres:
+    image: postgres:14
+    container_name: gitlab-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: gitlab
+      POSTGRES_PASSWORD: your_db_password
+      POSTGRES_DB: gitlabhq_production
+    volumes:
+      - gitlab-postgres:/var/lib/postgresql/data
+    networks:
+      - dev-ci
+
+  # Usługa Redis
+  redis:
+    image: redis:latest
+    container_name: gitlab-redis
+    restart: always
+    volumes:
+      - gitlab-redis:/data
+    networks:
+      - dev-ci
+  
+  jenkins:
+    image: jenkins/jenkins:lts  # Wersja LTS (Long-Term Support) Jenkinsa
+    container_name: jenkins
+    restart: always
+    ports:
+      - "8082:8080"           # Port HTTP dla dostępu do interfejsu Jenkins
+      - "50000:50000"         # Port do komunikacji z agentami Jenkins
+    volumes:
+      - jenkins_home:/var/jenkins_home  # Wolumin dla danych Jenkinsa
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"  # Opcjonalnie wyłącz kreator początkowy
+      JENKINS_ADMIN_ID: admin  # Opcjonalnie zdefiniuj admina przy pierwszym uruchomieniu
+      JENKINS_ADMIN_PASSWORD: admin_password  # Zdefiniuj hasło administratora (zmień!)
+    networks:
+      - dev-ci
+  
+  jenkins-agent:
+    image: jenkins/inbound-agent:latest
+    container_name: jenkins-agent
+    environment:
+      JENKINS_URL: "http://jenkins:8080"      # URL głównego serwera Jenkinsa (dostosuj URL)
+      JENKINS_AGENT_NAME: "ci-agent"                 # Nazwa agenta, którą zobaczysz w Jenkinsie
+      JENKINS_AGENT_WORKDIR: "/home/jenkins/agent"   # Katalog roboczy agenta
+      JENKINS_SECRET: "984f734361ccfc835ceaa504be2bdace1740c4b61eea8b8b0f2ddcaa43040775"             # Sekret agenta uzyskany z konfiguracji głównego serwera Jenkinsa
+    volumes:
+      - jenkins_agent_workdir:/home/jenkins/agent    # Wolumin na katalog roboczy agenta
+    networks:
+      - dev-ci
+    depends_on:
+      - jenkins
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    depends_on:
+      - db
+      - jenkins
+      - gitlab
+    ports:
+      - "9000:9000"  # Port HTTP dla interfejsu SonarQube
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar_password
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - dev-ci
+
+  # Usługa bazy danych PostgreSQL
+  db:
+    image: postgres:14
+    container_name: sonarqube-db
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar_password
+      POSTGRES_DB: sonar
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - dev-ci
+
+networks:
+  dev-ci:
+
+secrets:
+  gitlab_root_password:
+    file: ./.docker/gitlab/root_password.tx
+
+volumes:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
+  gitlab-postgres:
+  gitlab-redis:
+  jenkins_home:
+  jenkins_agent_workdir:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  postgresql_data:
+

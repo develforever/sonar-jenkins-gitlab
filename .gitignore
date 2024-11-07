@@ -1,0 +1,5 @@
+repos/
+!repos/.gitkeep
+id_rsa*
+.vscode
+.history
