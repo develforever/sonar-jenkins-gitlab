@@ -92,7 +92,8 @@ services:
         volumes:
             - jenkins_home:/var/jenkins_home
         environment:
-            JAVA_OPTS: '-Djenkins.install.runSetupWizard=false --httpPort=8082'
+            JENKINS_OPTS: '--httpPort=8082'
+            JAVA_OPTS: '-Djenkins.install.runSetupWizard=false'
             JENKINS_ADMIN_ID: admin
             JENKINS_ADMIN_PASSWORD: admin_password
         networks:

@@ -7,7 +7,7 @@ RUN apt install -y software-properties-common \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update
 
-RUN apt-get update -y && apt-get install -y nano curl wget php8.2 php8.2-xml openssl apt-transport-https \
+RUN apt-get update -y && apt-get install -y nano curl wget php8.2 php8.2-xml php8.2-zip unzip openssl apt-transport-https \
     ca-certificates curl software-properties-common
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
