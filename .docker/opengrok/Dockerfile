@@ -8,5 +8,5 @@ RUN git config --global --add safe.directory '*'
 
 RUN mkdir -p ${HOME}/.ssh && touch ${HOME}/.ssh/id_rsa && chmod 0600 ${HOME}/.ssh/id_rsa
 
-RUN ssh-keyscan -H gitlab >> ${HOME}/.ssh/known_hosts
+#RUN ssh-keyscan -H gitlab.localhost >> ${HOME}/.ssh/known_hosts
 

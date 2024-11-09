@@ -10,7 +10,7 @@ services:
         environment:
             #GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
             GITLAB_OMNIBUS_CONFIG: |
-                external_url 'http://gitlab.localhost'
+                external_url 'http://gitlab.localhost:8081'
                 gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost', 'localhost', '127.0.0.1']
                 gitlab_rails['env'] = {
                   'no_proxy' => 'jenkins,jenkins.localhost,localhost,127.0.0.1'
@@ -26,7 +26,7 @@ services:
                 gitlab_rails['db_host'] = 'postgres'
                 gitlab_rails['redis_host'] = 'redis'
         ports:
-            - '8081:80'
+            - '8081:8081'
             - '443:443'
             - '2224:22'
         volumes:
@@ -40,7 +40,23 @@ services:
         depends_on:
             - postgres
         healthcheck:
-            test: "curl -f http://localhost"
+          test: ["CMD", "curl", "-f", "http://localhost:80"]
+          interval: 60s
+          timeout: 10s
+          retries: 3
+          start_period: 3m
+    
+    gitlab-runner:
+      build:
+            context: .docker/gitlab-runner
+            dockerfile: Dockerfile
+      container_name: gitlab-runner
+      restart: always
+      volumes:
+        - gitlab-runner-config:/etc/gitlab-runner
+        - /var/run/docker.sock:/var/run/docker.sock
+      networks:
+          - dev-ci
 
     # Usługa bazy danych PostgreSQL
     postgres:
@@ -66,6 +82,7 @@ services:
 
     jenkins:
         container_name: jenkins
+        hostname: 'jenkins.localhost'
         build:
             context: .docker/jenkins
             dockerfile: Dockerfile
@@ -90,10 +107,10 @@ services:
             JENKINS_URL: 'http://jenkins:8080'
             JENKINS_AGENT_NAME: 'ci-agent'
             JENKINS_AGENT_WORKDIR: '/home/jenkins/agent'
-            JENKINS_SECRET: '77ecc75e3049ee88fba5e4123a1e4d85d745ab3e2fa7da5d2b5b5f9b98aa3a98'
+            JENKINS_SECRET: '4e8208e3b98df4490516dda8cc80f65312a6f5c5e2e883c120f31b0879f07586'
         volumes:
             - jenkins_agent_workdir:/home/jenkins/agent
-            - '.docker/id_rsa:/home/jenkins/.ssh/id_rsa'
+            - '.docker/jenkins-agent/id_rsa:/home/jenkins/.ssh/id_rsa'
         networks:
             - dev-ci
         depends_on:
@@ -101,21 +118,14 @@ services:
 
     sonarqube:
         container_name: sonarqube
+        hostname: sonarqube.localhost
         build:
             context: .docker/sonarqube
             dockerfile: Dockerfile
         depends_on:
-            gitlab: 
-                condition: service_healthy
-                restart: true
-            db:
-                condition: service_healthy
-                restart: true
-            jenkins:
-                condition: service_healthy
-                restart: true
+            - db
         ports:
-            - '9000:9000' # Port HTTP dla interfejsu SonarQube
+            - '9000:9000' 
         environment:
             SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
             SONAR_JDBC_USERNAME: sonar
@@ -158,6 +168,8 @@ services:
             gitlab: 
                 condition: service_healthy
                 restart: true
+        networks:
+          - dev-ci
 
 networks:
     dev-ci:
@@ -181,3 +193,4 @@ volumes:
     opengrok_src:
     opengrock_etc:
     opengrock_data:
+    gitlab-runner-config:

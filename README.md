@@ -43,3 +43,6 @@ https://PutYourGitlabHere/users/confirmation?confirmation_token=PutYourTokenHere
 
 I used this to change my email on a gitlab instance without an email server.
 ```
+
+git config --local user.name "Administrator"
+git config --local user.email "gitlab_admin_f5e1fd@example.com"
