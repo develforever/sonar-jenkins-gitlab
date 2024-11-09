@@ -5,6 +5,11 @@
 gitlab-rails console -e production
 docker exec -it gitlab grep 'Password:'
 user.update!(state: 'active')
+curl -X POST -L --user admin:112660be4ffb970e307e890760e1350853 http://jenkins:8080/job/php-app/build
+user = User.find_by(email: 'user@example.com')
+user.update!(admin: true)
+gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost']
+gitlab-ctl reconfigure
 ```
 
 

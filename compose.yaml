@@ -11,6 +11,10 @@ services:
       #GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://gitlab.localhost'  # Ustaw URL zewnętrzny
+        gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost', 'localhost', '127.0.0.1']
+        gitlab_rails['env'] = {
+          'no_proxy' => 'jenkins,jenkins.localhost,localhost,127.0.0.1'
+        }
         gitlab_rails['initial_root_password'] = 'admin123'
         gitlab_rails['gitlab_shell_ssh_port'] = 2224
         gitlab_rails['db_adapter'] = 'postgresql'
