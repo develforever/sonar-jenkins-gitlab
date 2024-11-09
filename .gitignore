@@ -1,6 +1,6 @@
 repos/*
 !repos/.gitkeep
-.docker/id_rsa*
+id_rsa*
 .vscode
 .history
 opengrok/src/
