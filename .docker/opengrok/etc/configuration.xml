@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="17.0.12" class="java.beans.XMLDecoder">
+ <object class="org.opengrok.indexer.configuration.Configuration" id="Configuration0">
+  <void property="cmds">
+   <object class="java.util.Collections" method="unmodifiableMap">
+    <object class="java.util.HashMap">
+     <void method="put">
+      <string>org.opengrok.indexer.history.AccuRevRepository</string>
+      <string>accurev</string>
+     </void>
+     <void method="put">
+      <string>org.opengrok.indexer.history.SCCSRepository</string>
+      <string>/usr/bin/sccs</string>
+     </void>
+     <void method="put">
+      <string>org.opengrok.indexer.history.BazaarRepository</string>
+      <string>/usr/bin/bzr</string>
+     </void>
+     <void method="put">
+      <string>org.opengrok.indexer.history.MercurialRepository</string>
+      <string>/usr/bin/hg</string>
+     </void>
+     <void method="put">
+      <string>org.opengrok.indexer.history.SubversionRepository</string>
+      <string>/usr/bin/svn</string>
+     </void>
+     <void method="put">
+      <string>org.opengrok.indexer.history.PerforceRepository</string>
+      <string>/usr/bin/p4</string>
+     </void>
+     <void method="put">
+      <string>org.opengrok.indexer.history.CVSRepository</string>
+      <string>/usr/bin/cvs</string>
+     </void>
+    </object>
+   </object>
+  </void>
+  <void property="ctags">
+   <string>/usr/local/bin/ctags</string>
+  </void>
+  <void property="dataRoot">
+   <string>/opengrok/data</string>
+  </void>
+  <void id="IgnoredNames0" property="ignoredNames">
+   <void id="IgnoredDirs0" property="ignoredDirs">
+    <void property="items">
+     <void method="add">
+      <string>.git</string>
+     </void>
+     <void method="add">
+      <string>.hg</string>
+     </void>
+     <void method="add">
+      <string>.repo</string>
+     </void>
+     <void method="add">
+      <string>.bk</string>
+     </void>
+     <void method="add">
+      <string>.bzr</string>
+     </void>
+     <void method="add">
+      <string>.svn</string>
+     </void>
+     <void method="add">
+      <string>SCCS</string>
+     </void>
+     <void method="add">
+      <string>.razor</string>
+     </void>
+     <void method="add">
+      <string>RCS</string>
+     </void>
+     <void method="add">
+      <string>CVS</string>
+     </void>
+     <void method="add">
+      <string>CVSROOT</string>
+     </void>
+    </void>
+   </void>
+   <void id="IgnoredFiles0" property="ignoredFiles">
+    <void property="items">
+     <void method="add">
+      <string>.git</string>
+     </void>
+     <void method="add">
+      <string>.hgtags</string>
+     </void>
+     <void method="add">
+      <string>.hgignore</string>
+     </void>
+     <void method="add">
+      <string>.cvsignore</string>
+     </void>
+     <void method="add">
+      <string>.p4config</string>
+     </void>
+    </void>
+   </void>
+  </void>
+  <void id="Boolean0" method="isAllowLeadingWildcard"/>
+  <void property="projects">
+   <void method="put">
+    <string>sw-sdk</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>sw-sdk</string>
+     </void>
+     <void property="path">
+      <string>/sw-sdk</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>transcash-client</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>transcash-client</string>
+     </void>
+     <void property="path">
+      <string>/transcash-client</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>pactus-api</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>pactus-api</string>
+     </void>
+     <void property="path">
+      <string>/pactus-api</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>new-transcash</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>new-transcash</string>
+     </void>
+     <void property="path">
+      <string>/new-transcash</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>transcash-api-cache-bundle</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>transcash-api-cache-bundle</string>
+     </void>
+     <void property="path">
+      <string>/transcash-api-cache-bundle</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>api-doc</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>api-doc</string>
+     </void>
+     <void property="path">
+      <string>/api-doc</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>old-transcash-api</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>old-transcash-api</string>
+     </void>
+     <void property="path">
+      <string>/old-transcash-api</string>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>frontend</string>
+    <object class="org.opengrok.indexer.configuration.Project">
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="indexed">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="name">
+      <string>frontend</string>
+     </void>
+     <void property="path">
+      <string>/frontend</string>
+     </void>
+    </object>
+   </void>
+  </void>
+  <void property="projectsEnabled">
+   <object idref="Boolean0"/>
+  </void>
+  <void property="remoteScmSupported">
+   <object class="java.lang.Enum" method="valueOf">
+    <class>org.opengrok.indexer.configuration.Configuration$RemoteSCM</class>
+    <string>ON</string>
+   </object>
+  </void>
+  <void property="repositories">
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>main</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-11-04 10:24 +0000 f3d78c1 Robert Jamroz chore(release): 0.1.0</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/api-doc</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/domain/bundle/api-doc.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>master</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-10-31 10:31 +0000 f9a1f62 Robert Jamroz chore(release): 1.42.1</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/sw-sdk</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/domain/sdk/sw-sdk.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>main</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-08-14 05:28 +0000 0580d56 Patryk Baszak chore(release): 2.1.1</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/transcash-api-cache-bundle</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/domain/bundle/transcash-api-cache-bundle.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>master</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-10-31 12:10 +0000 26291c0 Robert Jamroz chore(release): 1.18.5</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/new-transcash</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/new-transcash.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>master</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-10-30 07:15 +0000 649b31a PANDA-TEAM chore(release): 1.718.0</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/frontend</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/application/frontend.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>master</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-10-14 08:16 +0000 903a679 Robert Jamroz chore(release): 1.9.0</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/transcash-client</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/domain/bundle/transcash-client.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>develop</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-10-17 10:34 +0000 aa84858 Robert Jamroz chore(release): 3.108.3</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/old-transcash-api</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/application/old-transcash-api.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.opengrok.indexer.history.RepositoryInfo">
+     <void property="branch">
+      <string>master</string>
+     </void>
+     <void property="currentVersion">
+      <string>2024-10-31 12:36 +0000 132cdbc Robert Jamroz chore(release): 1.24.2</string>
+     </void>
+     <void property="directoryNameRelative">
+      <string>/pactus-api</string>
+     </void>
+     <void property="historyBasedReindex">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="historyEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="mergeCommitsEnabled">
+      <object idref="Boolean0"/>
+     </void>
+     <void property="parent">
+      <string>git@git.oss.trans.eu:transcash/pactus-api.git</string>
+     </void>
+     <void property="type">
+      <string>git</string>
+     </void>
+    </object>
+   </void>
+  </void>
+  <void property="sourceRoot">
+   <string>/opengrok/src</string>
+  </void>
+  <void id="SuggesterConfig0" property="suggesterConfig">
+   <void property="allowedFields">
+    <void method="clear"/>
+    <void method="add">
+     <string>defs</string>
+    </void>
+    <void method="add">
+     <string>path</string>
+    </void>
+    <void method="add">
+     <string>hist</string>
+    </void>
+    <void method="add">
+     <string>refs</string>
+    </void>
+    <void method="add">
+     <string>type</string>
+    </void>
+    <void method="add">
+     <string>full</string>
+    </void>
+   </void>
+  </void>
+ </object>
+</java>

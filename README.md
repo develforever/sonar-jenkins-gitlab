@@ -1,7 +1,24 @@
 # sonar-jenkins-gitlab
 
+### /etc/hosts
 
 ```
+# SONAR DEV START
+127.0.0.1 gitlab.localhost
+127.0.0.1 jenkins.localhost
+127.0.0.1 sonarqube.localhost
+# SONAR DEV END
+```
+
+### Opengrok 
+
+OpenGrok is based on VCS repositories. A best practice is to place projects in one folder, with subfolders for each branch name containing the project source code that we want to search.
+
+
+### Snipets
+
+```
+ssh-keygen -t rsa
 gitlab-rails console -e production
 docker exec -it gitlab grep 'Password:'
 user.update!(state: 'active')

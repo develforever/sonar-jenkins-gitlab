@@ -1,5 +1,10 @@
-repos/
+repos/*
 !repos/.gitkeep
-id_rsa*
+.docker/id_rsa*
 .vscode
 .history
+opengrok/src/
+opengrok/index/
+opengrok/data/
+!opengrok/src/.gitkeep
+!opengrok/data/.gitkeep

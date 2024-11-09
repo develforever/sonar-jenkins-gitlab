@@ -1,150 +1,183 @@
 version: '3.8'
 
 services:
-  # Usługa GitLab
-  gitlab:
-    image: gitlab/gitlab-ce:latest
-    container_name: gitlab
-    restart: always
-    hostname: 'gitlab.localhost'  # Dostosuj nazwę hosta
-    environment:
-      #GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.localhost'  # Ustaw URL zewnętrzny
-        gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost', 'localhost', '127.0.0.1']
-        gitlab_rails['env'] = {
-          'no_proxy' => 'jenkins,jenkins.localhost,localhost,127.0.0.1'
-        }
-        gitlab_rails['initial_root_password'] = 'admin123'
-        gitlab_rails['gitlab_shell_ssh_port'] = 2224
-        gitlab_rails['db_adapter'] = 'postgresql'
-        gitlab_rails['db_encoding'] = 'unicode'
-        gitlab_rails['db_database'] = 'gitlabhq_production'
-        gitlab_rails['db_pool'] = 10
-        gitlab_rails['db_username'] = 'gitlab'
-        gitlab_rails['db_password'] = 'your_db_password'
-        gitlab_rails['db_host'] = 'postgres'
-        gitlab_rails['redis_host'] = 'redis'
-    ports:
-      - '8081:80'         # HTTP port GitLaba
-      - '443:443'         # HTTPS port GitLaba (opcjonalne)
-      - '2224:22'         # Port SSH GitLaba
-    volumes:
-      - gitlab-config:/etc/gitlab
-      - gitlab-logs:/var/log/gitlab
-      - gitlab-data:/var/opt/gitlab
-    networks:
-      - dev-ci
-    secrets:
-      - gitlab_root_password
-    depends_on:
-      - postgres
+    gitlab:
+        container_name: gitlab
+        build:
+            context: .docker/gitlab
+            dockerfile: Dockerfile
+        hostname: 'gitlab.localhost'
+        environment:
+            #GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
+            GITLAB_OMNIBUS_CONFIG: |
+                external_url 'http://gitlab.localhost'
+                gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost', 'localhost', '127.0.0.1']
+                gitlab_rails['env'] = {
+                  'no_proxy' => 'jenkins,jenkins.localhost,localhost,127.0.0.1'
+                }
+                gitlab_rails['initial_root_password'] = 'ms7kWz~\DnKJ_-'
+                gitlab_rails['gitlab_shell_ssh_port'] = 2224
+                gitlab_rails['db_adapter'] = 'postgresql'
+                gitlab_rails['db_encoding'] = 'unicode'
+                gitlab_rails['db_database'] = 'gitlabhq_production'
+                gitlab_rails['db_pool'] = 10
+                gitlab_rails['db_username'] = 'gitlab'
+                gitlab_rails['db_password'] = 'your_db_password'
+                gitlab_rails['db_host'] = 'postgres'
+                gitlab_rails['redis_host'] = 'redis'
+        ports:
+            - '8081:80'
+            - '443:443'
+            - '2224:22'
+        volumes:
+            - gitlab-config:/etc/gitlab
+            - gitlab-logs:/var/log/gitlab
+            - gitlab-data:/var/opt/gitlab
+        networks:
+            - dev-ci
+        secrets:
+            - gitlab_root_password
+        depends_on:
+            - postgres
+        healthcheck:
+            test: "curl -f http://localhost"
 
-  # Usługa bazy danych PostgreSQL
-  postgres:
-    image: postgres:14
-    container_name: gitlab-postgres
-    restart: always
-    environment:
-      POSTGRES_USER: gitlab
-      POSTGRES_PASSWORD: your_db_password
-      POSTGRES_DB: gitlabhq_production
-    volumes:
-      - gitlab-postgres:/var/lib/postgresql/data
-    networks:
-      - dev-ci
+    # Usługa bazy danych PostgreSQL
+    postgres:
+        image: postgres:14
+        container_name: gitlab-postgres
+        environment:
+            POSTGRES_USER: gitlab
+            POSTGRES_PASSWORD: your_db_password
+            POSTGRES_DB: gitlabhq_production
+        volumes:
+            - gitlab-postgres:/var/lib/postgresql/data
+        networks:
+            - dev-ci
 
-  # Usługa Redis
-  redis:
-    image: redis:latest
-    container_name: gitlab-redis
-    restart: always
-    volumes:
-      - gitlab-redis:/data
-    networks:
-      - dev-ci
-  
-  jenkins:
-    image: jenkins/jenkins:lts  # Wersja LTS (Long-Term Support) Jenkinsa
-    container_name: jenkins
-    restart: always
-    ports:
-      - "8082:8080"           # Port HTTP dla dostępu do interfejsu Jenkins
-      - "50000:50000"         # Port do komunikacji z agentami Jenkins
-    volumes:
-      - jenkins_home:/var/jenkins_home  # Wolumin dla danych Jenkinsa
-    environment:
-      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"  # Opcjonalnie wyłącz kreator początkowy
-      JENKINS_ADMIN_ID: admin  # Opcjonalnie zdefiniuj admina przy pierwszym uruchomieniu
-      JENKINS_ADMIN_PASSWORD: admin_password  # Zdefiniuj hasło administratora (zmień!)
-    networks:
-      - dev-ci
-  
-  jenkins-agent:
-    image: jenkins/inbound-agent:latest
-    container_name: jenkins-agent
-    environment:
-      JENKINS_URL: "http://jenkins:8080"      # URL głównego serwera Jenkinsa (dostosuj URL)
-      JENKINS_AGENT_NAME: "ci-agent"                 # Nazwa agenta, którą zobaczysz w Jenkinsie
-      JENKINS_AGENT_WORKDIR: "/home/jenkins/agent"   # Katalog roboczy agenta
-      JENKINS_SECRET: "984f734361ccfc835ceaa504be2bdace1740c4b61eea8b8b0f2ddcaa43040775"             # Sekret agenta uzyskany z konfiguracji głównego serwera Jenkinsa
-    volumes:
-      - jenkins_agent_workdir:/home/jenkins/agent    # Wolumin na katalog roboczy agenta
-    networks:
-      - dev-ci
-    depends_on:
-      - jenkins
+    # Usługa Redis
+    redis:
+        image: redis:latest
+        container_name: gitlab-redis
+        volumes:
+            - gitlab-redis:/data
+        networks:
+            - dev-ci
 
-  sonarqube:
-    image: sonarqube:latest
-    container_name: sonarqube
-    depends_on:
-      - db
-      - jenkins
-      - gitlab
-    ports:
-      - "9000:9000"  # Port HTTP dla interfejsu SonarQube
-    environment:
-      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: sonar_password
-    volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
-    networks:
-      - dev-ci
+    jenkins:
+        container_name: jenkins
+        build:
+            context: .docker/jenkins
+            dockerfile: Dockerfile
+        ports:
+            - '8082:8080'
+            - '50000:50000'
+        volumes:
+            - jenkins_home:/var/jenkins_home
+        environment:
+            JAVA_OPTS: '-Djenkins.install.runSetupWizard=false'
+            JENKINS_ADMIN_ID: admin
+            JENKINS_ADMIN_PASSWORD: admin_password
+        networks:
+            - dev-ci
 
-  # Usługa bazy danych PostgreSQL
-  db:
-    image: postgres:14
-    container_name: sonarqube-db
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: sonar_password
-      POSTGRES_DB: sonar
-    volumes:
-      - postgresql_data:/var/lib/postgresql/data
-    networks:
-      - dev-ci
+    jenkins-agent:
+        container_name: jenkins-agent
+        build:
+            context: .docker/jenkins-agent
+            dockerfile: Dockerfile
+        environment:
+            JENKINS_URL: 'http://jenkins:8080'
+            JENKINS_AGENT_NAME: 'ci-agent'
+            JENKINS_AGENT_WORKDIR: '/home/jenkins/agent'
+            JENKINS_SECRET: '77ecc75e3049ee88fba5e4123a1e4d85d745ab3e2fa7da5d2b5b5f9b98aa3a98'
+        volumes:
+            - jenkins_agent_workdir:/home/jenkins/agent
+            - '.docker/id_rsa:/home/jenkins/.ssh/id_rsa'
+        networks:
+            - dev-ci
+        depends_on:
+            - jenkins
+
+    sonarqube:
+        container_name: sonarqube
+        build:
+            context: .docker/sonarqube
+            dockerfile: Dockerfile
+        depends_on:
+            gitlab: 
+                condition: service_healthy
+                restart: true
+            db:
+                condition: service_healthy
+                restart: true
+            jenkins:
+                condition: service_healthy
+                restart: true
+        ports:
+            - '9000:9000' # Port HTTP dla interfejsu SonarQube
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar_password
+        volumes:
+            - sonarqube_data:/opt/sonarqube/data
+            - sonarqube_extensions:/opt/sonarqube/extensions
+            - sonarqube_logs:/opt/sonarqube/logs
+        networks:
+            - dev-ci
+
+    # Usługa bazy danych PostgreSQL
+    db:
+        image: postgres:14
+        container_name: sonarqube-db
+        environment:
+            POSTGRES_USER: sonar
+            POSTGRES_PASSWORD: sonar_password
+            POSTGRES_DB: sonar
+        volumes:
+            - postgresql_data:/var/lib/postgresql/data
+        networks:
+            - dev-ci
+
+    opengrok:
+        container_name: opengrokci
+        build:
+            context: .docker/opengrok
+            dockerfile: Dockerfile
+        ports:
+            - '7080:8080/tcp'
+        environment:
+            SYNC_PERIOD_MINUTES: '60'
+        volumes:
+            - '.docker/id_rsa:/root/.ssh/id_rsa'
+            - '.docker/opengrok/src/:/opengrok/src/'
+            - '.docker/opengrok/etc/:/opengrok/etc/'
+            - '.docker/opengrok/data/:/opengrok/data/'
+        depends_on:
+            gitlab: 
+                condition: service_healthy
+                restart: true
 
 networks:
-  dev-ci:
+    dev-ci:
 
 secrets:
-  gitlab_root_password:
-    file: ./.docker/gitlab/root_password.tx
+    gitlab_root_password:
+        file: ./.docker/gitlab/root_password.tx
 
 volumes:
-  gitlab-config:
-  gitlab-logs:
-  gitlab-data:
-  gitlab-postgres:
-  gitlab-redis:
-  jenkins_home:
-  jenkins_agent_workdir:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
-  postgresql_data:
-
+    gitlab-config:
+    gitlab-logs:
+    gitlab-data:
+    gitlab-postgres:
+    gitlab-redis:
+    jenkins_home:
+    jenkins_agent_workdir:
+    sonarqube_data:
+    sonarqube_extensions:
+    sonarqube_logs:
+    postgresql_data:
+    opengrok_src:
+    opengrock_etc:
+    opengrock_data:
