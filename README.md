@@ -19,30 +19,21 @@ OpenGrok is based on VCS repositories. A best practice is to place projects in o
 
 ```
 ssh-keygen -t rsa
-gitlab-rails console -e production
-docker exec -it gitlab grep 'Password:'
+
+gitlab-rails console
+user = User.find_by(email: "youroldemail@example.com")
 user.update!(state: 'active')
-curl -X POST -L --user admin:112660be4ffb970e307e890760e1350853 http://jenkins:8080/job/php-app/build
 user = User.find_by(email: 'user@example.com')
 user.update!(admin: true)
+
 gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost']
 gitlab-ctl reconfigure
+
+docker exec -it gitlab grep 'Password:'
+
+curl -X POST -L --user admin:112660be4ffb970e307e890760e1350853 http://jenkins.localhost:8082/job/php-app/build
+
+git config --local user.name "User Name"
+git config --local user.email "email@example.com"
+
 ```
-
-
-```
-On your gitlab server run gitlab-rails console production
-
-Find your user via user = User.find_by(email: "youroldemail@example.com")
-
-Optionally change the user's email with user.email = "yournewemail@example.com" Then run user.save!
-
-Get the user's token with user.confirmation_token
-
-https://PutYourGitlabHere/users/confirmation?confirmation_token=PutYourTokenHere
-
-I used this to change my email on a gitlab instance without an email server.
-```
-
-git config --local user.name "Administrator"
-git config --local user.email "gitlab_admin_f5e1fd@example.com"
