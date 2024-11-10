@@ -105,7 +105,7 @@ services:
             context: .docker/jenkins-agent
             dockerfile: Dockerfile
         environment:
-            JENKINS_URL: 'http://jenkins:8080'
+            JENKINS_URL: 'http://jenkins:8082'
             JENKINS_AGENT_NAME: 'ci-agent'
             JENKINS_AGENT_WORKDIR: '/home/jenkins/agent'
             JENKINS_SECRET: '4e8208e3b98df4490516dda8cc80f65312a6f5c5e2e883c120f31b0879f07586'
