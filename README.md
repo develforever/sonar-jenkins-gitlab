@@ -37,3 +37,5 @@ git config --local user.name "User Name"
 git config --local user.email "email@example.com"
 
 ```
+Sonar tests config
+https://docs.sonarsource.com/sonarqube/latest/project-administration/analysis-scope/
