@@ -154,8 +154,8 @@ services:
         environment:
             SYNC_PERIOD_MINUTES: '60'
         volumes:
-            - '.docker/id_rsa:/root/.ssh/id_rsa'
-            - '.docker/opengrok/src/:/opengrok/src/'
+            - '.docker/opengrok/id_rsa:/root/.ssh/id_rsa'
+            - './repos:/opengrok/src/'
             - '.docker/opengrok/etc/:/opengrok/etc/'
             - '.docker/opengrok/data/:/opengrok/data/'
         depends_on:
