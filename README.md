@@ -36,6 +36,10 @@ curl -X POST -L --user admin:112660be4ffb970e307e890760e1350853 http://jenkins.l
 git config --local user.name "User Name"
 git config --local user.email "email@example.com"
 
+docker inspect --format "{{json .State.Health }}" <container name> | jq
+
+ssh-keygen -f "/home/dev/.ssh/known_hosts" -R "[gitlab.localhost]:2224"
+
 ```
 Sonar tests config
 https://docs.sonarsource.com/sonarqube/latest/project-administration/analysis-scope/

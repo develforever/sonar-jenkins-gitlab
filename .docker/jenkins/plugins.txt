@@ -1,0 +1,8 @@
+instance-identity
+sonar
+ssh-agent
+cloudbees-folder
+gitlab-plugin
+htmlpublisher
+cobertura
+nodejs

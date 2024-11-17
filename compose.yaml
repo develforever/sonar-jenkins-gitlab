@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
     gitlab:
@@ -7,28 +6,10 @@ services:
             context: .docker/gitlab
             dockerfile: Dockerfile
         hostname: 'gitlab.localhost'
-        environment:
-            #GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
-            GITLAB_OMNIBUS_CONFIG: |
-                external_url 'http://gitlab.localhost:8081'
-                gitlab_rails['allowed_hosts'] = ['jenkins', 'jenkins.localhost', 'localhost', '127.0.0.1']
-                gitlab_rails['env'] = {
-                  'no_proxy' => 'jenkins,jenkins.localhost,localhost,127.0.0.1'
-                }
-                gitlab_rails['initial_root_password'] = 'ms7kWz~\DnKJ_-'
-                gitlab_rails['gitlab_shell_ssh_port'] = 2224
-                gitlab_rails['db_adapter'] = 'postgresql'
-                gitlab_rails['db_encoding'] = 'unicode'
-                gitlab_rails['db_database'] = 'gitlabhq_production'
-                gitlab_rails['db_pool'] = 10
-                gitlab_rails['db_username'] = 'gitlab'
-                gitlab_rails['db_password'] = 'your_db_password'
-                gitlab_rails['db_host'] = 'postgres'
-                gitlab_rails['redis_host'] = 'redis'
         ports:
             - '8081:8081'
             - '443:443'
-            - '2224:22'
+            - '2224:2224'
         volumes:
             - gitlab-config:/etc/gitlab
             - gitlab-logs:/var/log/gitlab
@@ -40,7 +21,7 @@ services:
         depends_on:
             - postgres
         healthcheck:
-          test: ["CMD", "curl", "-f", "http://localhost:80"]
+          test: ["CMD", "curl", "-f", "http://localhost:8081/users/sign_in"]
           interval: 60s
           timeout: 10s
           retries: 3
@@ -54,6 +35,18 @@ services:
       restart: always
       volumes:
         - gitlab-runner-config:/etc/gitlab-runner
+        - /var/run/docker.sock:/var/run/docker.sock
+      networks:
+          - dev-ci
+
+    gitlab-runner2:
+      build:
+            context: .docker/gitlab-runner2
+            dockerfile: Dockerfile
+      container_name: gitlab-runner2
+      restart: always
+      volumes:
+        - gitlab-runner-config2:/etc/gitlab-runner
         - /var/run/docker.sock:/var/run/docker.sock
       networks:
           - dev-ci
@@ -108,7 +101,7 @@ services:
             JENKINS_URL: 'http://jenkins:8082'
             JENKINS_AGENT_NAME: 'ci-agent'
             JENKINS_AGENT_WORKDIR: '/home/jenkins/agent'
-            JENKINS_SECRET: '4e8208e3b98df4490516dda8cc80f65312a6f5c5e2e883c120f31b0879f07586'
+            JENKINS_SECRET: 'b3dfb72a22fa0a5dcf8817c2b04ebec56165ec81a9b11712c9bc9ac092609661'
         volumes:
             - jenkins_agent_workdir:/home/jenkins/agent
             - '.docker/jenkins-agent/id_rsa:/home/jenkins/.ssh/id_rsa'
@@ -195,3 +188,4 @@ volumes:
     opengrock_etc:
     opengrock_data:
     gitlab-runner-config:
+    gitlab-runner-config2:
