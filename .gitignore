@@ -3,8 +3,8 @@ repos/*
 id_rsa*
 .vscode
 .history
-opengrok/src/
-opengrok/index/
-opengrok/data/
-!opengrok/src/.gitkeep
-!opengrok/data/.gitkeep
+.docker/opengrok/src/
+.docker/opengrok/index/
+.docker/opengrok/data/
+!.docker/opengrok/src/.gitkeep
+!.docker/opengrok/data/.gitkeep
