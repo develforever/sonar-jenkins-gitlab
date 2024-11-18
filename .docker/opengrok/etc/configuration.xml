@@ -133,6 +133,9 @@
      <void property="historyEnabled">
       <boolean>true</boolean>
      </void>
+     <void property="indexed">
+      <boolean>true</boolean>
+     </void>
      <void property="mergeCommitsEnabled">
       <boolean>true</boolean>
      </void>
@@ -186,10 +189,10 @@
    <void method="add">
     <object class="org.opengrok.indexer.history.RepositoryInfo">
      <void property="branch">
-      <string>10.x</string>
+      <string>main</string>
      </void>
      <void property="currentVersion">
-      <string>2024-10-11 13:19 +0000 a62f182 Samir M BUILD-6088 Create SECURITY.md</string>
+      <string>2024-11-17 21:55 +0000 2611f9e Develforever update</string>
      </void>
      <void property="directoryNameRelative">
       <string>/todo-rule</string>
@@ -204,7 +207,7 @@
       <boolean>true</boolean>
      </void>
      <void property="parent">
-      <string>https://github.com/SonarSource/sonar-custom-plugin-example.git</string>
+      <string>ssh://git@gitlab.localhost:2224/root/todo-rule.git</string>
      </void>
      <void property="type">
       <string>git</string>

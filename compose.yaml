@@ -38,6 +38,8 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
       networks:
           - dev-ci
+      depends_on:
+        - gitlab
 
     gitlab-runner2:
       build:
@@ -50,6 +52,8 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
       networks:
           - dev-ci
+      depends_on:
+        - gitlab
 
     # Usługa bazy danych PostgreSQL
     postgres:

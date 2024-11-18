@@ -20,5 +20,6 @@ shutdown_timeout = 0
     privileged = false
     disable_cache = false
     volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
+    network_mode = "host"
   [runners.cache]
     Insecure = false

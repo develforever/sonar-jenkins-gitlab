@@ -17,3 +17,5 @@ COPY --chown=jenkins:jenkins plugins.txt /var/jenkins_home/plugins.txt
 COPY --chown=jenkins:jenkins initialAdminPassword /var/jenkins_home/secrets/initialAdminPassword
 COPY --chown=jenkins:jenkins agent.xml /var/jenkins_home/nodes/ci-agent/config.xml
 COPY --chown=jenkins:jenkins config.xml /var/jenkins_home/config.xml
+RUN mkdir -p /var/jenkins_home/jobs/
+COPY --chown=jenkins:jenkins php-app_job.xml /var/jenkins_home/jobs/php-app/config.xml

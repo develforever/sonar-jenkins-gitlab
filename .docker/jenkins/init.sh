@@ -1,14 +1,15 @@
 #!/bin/bash
 
 cd
+jnHost=http://jenkins.localhost:8082
 
 if [ ! -f jenkins-cli.jar ];then
-    wget http://jenkins.localhost:8082/jnlpJars/jenkins-cli.jar
+    wget $jnHost/jnlpJars/jenkins-cli.jar
 fi
 
-jn="java -jar jenkins-cli.jar -s http://jenkins.localhost:8082/"
+jn="java -jar jenkins-cli.jar -s $jnHost/"
 
-#echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount("admin", "admin")' | $jn groovy =
+echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount("admin", "admin")' | $jn groovy =
 
 LINES=$(cat plugins.txt)
 for plgname in $LINES
